@@ -50,12 +50,11 @@
 2. MongoDB
 3. Redis
 4. Socket.io
-5. TypeScript
-6. JWT and passport
-7. Docker
-8. Kubernetes (K8s) or ECS
-9. RabbitMQ or Kafka
-10. Helmet.js (Middleware for Express.js)
+5. JWT and passport
+6. Docker
+7. Kubernetes (K8s) or ECS
+8. RabbitMQ or Kafka
+9. Helmet.js (Middleware for Express.js)
 
 ## Frontend Stack
 
