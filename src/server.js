@@ -1,21 +1,42 @@
-import { config } from "dotenv";
-config({ path: ".env" });
-
+import "./config/env.config.js";
+import process from "node:process";
 import connectDB from "./db/connection.js";
-import { app } from "./app.js";
 import { connectRedis } from "./services/redis.services.js";
+import { startApp } from "./app.js";
 
-const port = process.env.PORT || 8000;
+/**
+ * @description Start the server.
+ *
+ * @return {Promise<Express>}
+ */
+async function startServer() {
+  try {
+    await connectDB();
 
-connectDB()
-	.then(() => {
-		connectRedis();
-	})
-	.then(() => {
-		app.listen(port, () => {
-			console.log(`\n⚡️ Server is running at http://localhost:${port}`);
-		});
-	})
-	.catch((error) => {
-		console.log("Failed to connectDB", error);
-	});
+    await connectRedis();
+
+    return startApp();
+  } catch (error) {
+    console.error("Failed to start server:", error);
+    process.exit(1);
+  }
+}
+
+const NODE_ENV = process.env.NODE_ENV;
+
+if (NODE_ENV !== "test") {
+  (async () => {
+    try {
+      const app = await startServer();
+      const PORT = Number(process.env.PORT) || 8000;
+      app.listen(PORT, () => {
+        console.log("\n⚙️  Server is running on port:", PORT);
+      });
+    } catch (error) {
+      console.error("Failed to listen server:", error);
+      process.exit(1);
+    }
+  })();
+}
+
+export { startServer };
