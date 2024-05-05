@@ -1,5 +1,6 @@
 import supertest from "supertest";
 import { startServer } from "../../server.js";
+import { connectionInstance } from "../../db/connection.js";
 import { OTP } from "../../models/otp.models.js";
 import { User } from "../../models/user.models.js";
 
@@ -12,6 +13,10 @@ beforeAll(async () => {
     console.error("Error starting server:", error);
     process.exit(1); // Exit the tests if the server fails to start
   }
+});
+
+afterAll(async () => {
+  await connectionInstance.disconnect();
 });
 
 describe("User API", () => {

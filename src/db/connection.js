@@ -1,12 +1,17 @@
 import mongoose from "mongoose";
 import process from "node:process";
 
+/**
+ * @type {mongoose}
+ */
+export let connectionInstance;
+
 const connectDB = async () => {
   const url = process.env.DB_URI;
 
   if (url) {
     try {
-      const connectionInstance = await mongoose.connect(
+      connectionInstance = await mongoose.connect(
         `${url}/${process.env.DB_NAME}`,
         {}
       );
