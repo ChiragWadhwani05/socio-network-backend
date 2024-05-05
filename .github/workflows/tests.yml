@@ -1,0 +1,50 @@
+name: Run tests
+
+env:
+  PORT: 8080
+  NODE_ENV: "development"
+  CORS_ORIGIN: "*"
+  DB_URI: "mongodb://localhost:27017"
+  DB_NAME: "socio-network"
+  REDIS_HOST: "localhost"
+  REDIS_PORT: 6379
+  REDIS_DB: 0
+  REDIS_PASS: ""
+  REDIS_EXPIRE_TIME: 15
+  SMTP_HOST: "smtp.ethereal.email"
+  SMTP_PORT: 587
+  SMTP_SERVICE: "SMTP"
+  SMTP_EMAIL: "mandy.dubuque@ethereal.email"
+  SMTP_PASSWORD: "WTEnTReKYPpt146q71"
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.8.0
+      - name: Start Redis
+        uses: supercharge/redis-github-action@1.7.0
+        with:
+          redis-image: redis/redis-stack-server
+      - name: Install dependencies
+        run: npm ci
+      - name: Run tests
+        run: npm run test
+      
+        
