@@ -49,7 +49,11 @@ describe("User API", () => {
           otp: otp.otp,
         });
 
-      await User.findByIdAndDelete(response.body.data._id);
+      console.log(response.body);
+
+      if (response.body.data) {
+        await User.findByIdAndDelete(response.body.data._id);
+      }
 
       expect(response.status).toBe(201);
     });

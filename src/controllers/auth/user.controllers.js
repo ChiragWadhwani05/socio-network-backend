@@ -39,12 +39,19 @@ const registerUser = asyncHandler(async (req, res) => {
     password,
   });
 
+  const accessToken = user.generateAccessToken();
+  const refreshToken = user.generateRefreshToken();
+
+  user.refreshToken = refreshToken;
+
   await user.save();
 
   // ====> Send Response <====
 
   const responseData = {
     _id: user._id,
+    accessToken,
+    refreshToken,
   };
 
   return res
