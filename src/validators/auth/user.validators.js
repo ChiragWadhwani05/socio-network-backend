@@ -1,7 +1,7 @@
 import { body } from "express-validator";
 import { validate } from "../index.js";
 
-const userRegisterValidator = validate([
+const registerUserValidator = validate([
   body("email")
     .trim()
     .notEmpty()
@@ -27,4 +27,18 @@ const userRegisterValidator = validate([
     .withMessage("Password must be strong."),
 ]);
 
-export { userRegisterValidator };
+const loginUserValidator = validate([
+  body("email")
+    .trim()
+    .notEmpty()
+    .withMessage("Email is required")
+    .isEmail()
+    .withMessage("Email is invalid"),
+  body("password")
+    .isStrongPassword({
+      minLength: 8,
+    })
+    .withMessage("Password must be strong."),
+]);
+
+export { registerUserValidator, loginUserValidator };

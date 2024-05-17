@@ -74,6 +74,10 @@ userSchema.pre("save", async function (next) {
   }
 });
 
+userSchema.methods.isPasswordCorrect = async function (password) {
+  return await bcryptjs.compare(password, this.password);
+};
+
 userSchema.methods.generateAccessToken = function () {
   const payload = { _id: this._id };
 
