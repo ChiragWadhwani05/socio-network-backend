@@ -20,10 +20,10 @@ const transporter = nodemailer.createTransport({
 async function sendMail(options) {
   try {
     await transporter.sendMail({
-      from: "test@gmail.com",
+      from: "sanga@gmail.com",
       to: options.email,
       subject: options.subject,
-      text: options.content,
+      html: options.content,
     });
   } catch (error) {
     console.error("Error sending mail", error);

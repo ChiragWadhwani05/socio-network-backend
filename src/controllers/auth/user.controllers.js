@@ -39,12 +39,19 @@ const registerUser = asyncHandler(async (req, res) => {
     password,
   });
 
+  const accessToken = user.generateAccessToken();
+  const refreshToken = user.generateRefreshToken();
+
+  user.refreshToken = refreshToken;
+
   await user.save();
 
   // ====> Send Response <====
 
   const responseData = {
     _id: user._id,
+    accessToken,
+    refreshToken,
   };
 
   return res
@@ -52,4 +59,39 @@ const registerUser = asyncHandler(async (req, res) => {
     .json(new ApiResponse(201, responseData, "User registered successfully."));
 });
 
-export { registerUser };
+const loginUser = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+
+  // ====> Check if user exists or not <====
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    throw new ApiError(404, "User not found.");
+  }
+
+  if (!user.isPasswordCorrect(password)) {
+    throw new ApiError(400, "Password is incorrect.");
+  }
+
+  const accessToken = user.generateAccessToken();
+  const refreshToken = user.generateRefreshToken();
+
+  user.refreshToken = refreshToken;
+
+  await user.save();
+
+  // ====> Send Response <====
+
+  const responseData = {
+    _id: user._id,
+    accessToken,
+    refreshToken,
+  };
+
+  return res
+    .status(201)
+    .json(new ApiResponse(201, responseData, "User login successfully."));
+});
+
+export { registerUser, loginUser };

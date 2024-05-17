@@ -1,6 +1,12 @@
 import { Router } from "express";
-import { registerUser } from "../../controllers/auth/user.controllers.js";
-import { userRegisterValidator } from "../../validators/auth/user.validators.js";
+import {
+  loginUser,
+  registerUser,
+} from "../../controllers/auth/user.controllers.js";
+import {
+  loginUserValidator,
+  registerUserValidator,
+} from "../../validators/auth/user.validators.js";
 
 /**
  * Creates and configures the users router.
@@ -9,7 +15,8 @@ import { userRegisterValidator } from "../../validators/auth/user.validators.js"
 function createUsersRouter() {
   const router = Router();
 
-  router.route("/register").post(userRegisterValidator, registerUser);
+  router.route("/register").post(registerUserValidator, registerUser);
+  router.route("/login").post(loginUserValidator, loginUser);
 
   return router;
 }
